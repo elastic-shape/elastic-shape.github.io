@@ -1,9 +1,9 @@
 """The references of the methods the program uses: ONE list, used by the window (every tab names the methods it uses with their citations, as links; menu choices that name a published method carry
-its short citation), by the manual (the reference list) and by ``er3ds references``.
+its short citation), by the manual (the reference list) and by ``eforma references``.
 
 Every entry has a short ``tag`` (author and year, as in the text), the full citation, and a link.  ``checked`` says that the bibliographic details and the link were looked up online while the entry
 was written (title, authors, journal, DOI); an entry that is not checked was written from the literature without that look-up and has NO direct link: it gets a search link (Crossref, by title and
-first author), which cannot be wrong, until a link is added.  ``er3ds references --check`` tries every link (it needs a network connection).
+first author), which cannot be wrong, until a link is added.  ``eforma references --check`` tries every link (it needs a network connection).
 """
 from __future__ import annotations
 

@@ -4,16 +4,16 @@
 Two ways to offer the zip:
 
   A. In this repository (simplest; the default):
-       python tools/update_release.py path/to/er3ds.zip [--manual path/to/ER3DS_manual.pdf]
+       python tools/update_release.py path/to/eforma.zip [--manual path/to/EFORMA_manual.pdf]
      copies the files into downloads/ and records them.  Upload (commit) downloads/ and data/release.json.
      Every new zip adds its size (about 36 MB) to the repository's history.
 
-  B. As a GitHub Release (keeps the repository small):  make a release on GitHub, attach er3ds.zip, then
-       python tools/update_release.py path/to/er3ds.zip --url https://github.com/USER/REPO/releases/latest/download/er3ds.zip
-     (add  --manual path/to/ER3DS_manual.pdf --manual-url https://github.com/USER/REPO/releases/latest/download/ER3DS_manual.pdf  for the manual).
+  B. As a GitHub Release (keeps the repository small):  make a release on GitHub, attach eforma.zip, then
+       python tools/update_release.py path/to/eforma.zip --url https://github.com/USER/REPO/releases/latest/download/eforma.zip
+     (add  --manual path/to/EFORMA_manual.pdf --manual-url https://github.com/USER/REPO/releases/latest/download/EFORMA_manual.pdf  for the manual).
      Nothing is copied; the download button points at the URL.  The URL with 'latest' always leads to the newest release.
 
-The version is read from the zip itself (src/er3ds/__init__.py), so it cannot disagree with the file.
+The version is read from the zip itself (src/eforma/__init__.py), so it cannot disagree with the file.
 """
 import argparse
 import datetime
@@ -38,18 +38,18 @@ def sha256(path):
 
 def version_of(zip_path):
     with zipfile.ZipFile(zip_path) as z:
-        names = [n for n in z.namelist() if re.search(r"(^|/)src/er3ds/__init__\.py$", n)]
+        names = [n for n in z.namelist() if re.search(r"(^|/)src/eforma/__init__\.py$", n)]
         if not names:
-            raise SystemExit(f"error: {zip_path} has no src/er3ds/__init__.py: is it the er3ds source zip?")
+            raise SystemExit(f"error: {zip_path} has no src/eforma/__init__.py: is it the eforma source zip?")
         m = re.search(r"__version__\s*=\s*[\"']([^\"']+)[\"']", z.read(names[0]).decode("utf-8", "replace"))
         if not m:
-            raise SystemExit("error: no __version__ in src/er3ds/__init__.py")
+            raise SystemExit("error: no __version__ in src/eforma/__init__.py")
         return m.group(1)
 
 
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("zip", help="the er3ds source zip")
+    ap.add_argument("zip", help="the eforma source zip")
     ap.add_argument("--manual", help="the manual (PDF), optional")
     ap.add_argument("--url", help="where the zip is (a GitHub Release URL); then it is not copied into downloads/")
     ap.add_argument("--manual-url", help="where the manual is, with --url")
@@ -57,24 +57,24 @@ def main(argv=None):
     if not os.path.isfile(a.zip):
         raise SystemExit(f"error: no such file: {a.zip}")
     version = version_of(a.zip)
-    rel = dict(version=version, file="er3ds.zip", size_bytes=os.path.getsize(a.zip), sha256=sha256(a.zip),
+    rel = dict(version=version, file="eforma.zip", size_bytes=os.path.getsize(a.zip), sha256=sha256(a.zip),
                date=datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d"))
     if a.url:
         rel["url"] = a.url
     else:
         os.makedirs(os.path.join(ROOT, "downloads"), exist_ok=True)
-        shutil.copyfile(a.zip, os.path.join(ROOT, "downloads", "er3ds.zip"))
-        rel["url"] = "downloads/er3ds.zip"
+        shutil.copyfile(a.zip, os.path.join(ROOT, "downloads", "eforma.zip"))
+        rel["url"] = "downloads/eforma.zip"
     if a.manual:
         if not os.path.isfile(a.manual):
             raise SystemExit(f"error: no such file: {a.manual}")
-        man = dict(file="ER3DS_manual.pdf", size_bytes=os.path.getsize(a.manual))
+        man = dict(file="EFORMA_manual.pdf", size_bytes=os.path.getsize(a.manual))
         if a.manual_url:
             man["url"] = a.manual_url
         else:
             os.makedirs(os.path.join(ROOT, "downloads"), exist_ok=True)
-            shutil.copyfile(a.manual, os.path.join(ROOT, "downloads", "ER3DS_manual.pdf"))
-            man["url"] = "downloads/ER3DS_manual.pdf"
+            shutil.copyfile(a.manual, os.path.join(ROOT, "downloads", "EFORMA_manual.pdf"))
+            man["url"] = "downloads/EFORMA_manual.pdf"
         rel["manual"] = man
     os.makedirs(os.path.join(ROOT, "data"), exist_ok=True)
     with open(os.path.join(ROOT, "data", "release.json"), "w", encoding="utf-8", newline="\n") as fh:

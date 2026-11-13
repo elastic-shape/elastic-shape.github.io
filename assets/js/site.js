@@ -1,4 +1,4 @@
-/* ER3DS website: small enhancements. The pages are complete without this file; it adds the menu button on small screens, the install tabs and copy buttons,
+/* E-FORMA website: small enhancements. The pages are complete without this file; it adds the menu button on small screens, the install tabs and copy buttons,
    the numbers of the current release (data/release.json), the links to GitHub (data/site.json) and the video cards (data/tutorials.json).
    No library, no cookie, nothing is loaded from another site (a YouTube video is only contacted after the visitor clicks its play button). */
 (function () {
@@ -94,7 +94,7 @@
   /* ---------------------------------------------------------------- the current release
      Two ways to offer the zip (data/site.json: "download_mode"):
        "github-release": the zip is attached to a release of your GitHub repository; the page asks GitHub for the LATEST release (version, date, size, link), so publishing a new release updates the page.
-       "local":          the zip is a file of this site (downloads/er3ds.zip) described by data/release.json (written by tools/update_release.py).
+       "local":          the zip is a file of this site (downloads/eforma.zip) described by data/release.json (written by tools/update_release.py).
      The page shows nothing it does not know: a number that cannot be found is left out, never guessed. */
   function formatBytes(n) {
     if (typeof n !== "number" || !isFinite(n)) { return ""; }
@@ -137,8 +137,8 @@
     }, notSetUp);
   }
   function fromGitHub(repo) {
-    var zip = repo.base + "/releases/latest/download/er3ds.zip";
-    var pdf = repo.base + "/releases/latest/download/ER3DS_manual.pdf";
+    var zip = repo.base + "/releases/latest/download/eforma.zip";
+    var pdf = repo.base + "/releases/latest/download/EFORMA_manual.pdf";
     showRelease({}, { file: zip, manual: pdf });                                  /* usable at once; the numbers follow if GitHub answers */
     return fetch("https://api.github.com/repos/" + repo.owner + "/" + repo.name + "/releases/latest", { headers: { Accept: "application/vnd.github+json" } }).then(function (r) {
       if (r.status === 404) { showRelease({}, { file: repo.base + "/releases", manual: repo.base + "/releases" }); return null; }
@@ -146,8 +146,8 @@
       return r.json();
     }).then(function (rel) {
       if (!rel || !rel.assets) { return; }
-      var asset = rel.assets.filter(function (a) { return a.name === "er3ds.zip"; })[0] || rel.assets.filter(function (a) { return /\.zip$/i.test(a.name); })[0];
-      var man = rel.assets.filter(function (a) { return a.name === "ER3DS_manual.pdf"; })[0];
+      var asset = rel.assets.filter(function (a) { return a.name === "eforma.zip"; })[0] || rel.assets.filter(function (a) { return /\.zip$/i.test(a.name); })[0];
+      var man = rel.assets.filter(function (a) { return a.name === "EFORMA_manual.pdf"; })[0];
       if (!asset) { showRelease({}, { file: rel.html_url || repo.base + "/releases", manual: man && man.browser_download_url }); return; }
       var digest = /^sha256:([0-9a-f]{64})$/.exec(asset.digest || "");
       showRelease({ version: (rel.tag_name || "").replace(/^[vV]/, "") ? "v" + (rel.tag_name || "").replace(/^[vV]/, "") : "", date: formatDate(rel.published_at), size: formatBytes(asset.size),

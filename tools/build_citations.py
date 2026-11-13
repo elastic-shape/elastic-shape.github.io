@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-"""Write the list of citations of citations.html from the program's own list of references (src/er3ds/references.py), the one the program shows in its tabs and in `er3ds references`.
+"""Write the list of citations of citations.html from the program's own list of references (src/eforma/references.py), the one the program shows in its tabs and in `eforma references`.
 
 The page features the RECENT methods for the three kinds of method that matter for a citation: registration, parameterization and statistical analysis.  "Recent" is set in
 tools/citations_config.json ("since": a year; "also_featured": the keys of older references you want in the main list anyway).  Every other reference of the program is still listed, in a
 collapsed section at the end, so that nothing the program uses is hidden.
 
     python tools/build_citations.py                                  reads tools/references_snapshot.py (a copy of the program's references.py)
-    python tools/build_citations.py --zip path/to/er3ds.zip          reads references.py out of the program's zip instead
+    python tools/build_citations.py --zip path/to/eforma.zip          reads references.py out of the program's zip instead
     python tools/build_citations.py --source path/to/references.py
     python tools/build_citations.py --since 2005                     another cutoff, for this run only
 
@@ -32,8 +32,8 @@ CATEGORIES = [("registration", "Registration methods", ("Registration", "Registe
 
 
 def load_references(source_text):
-    mod = types.ModuleType("er3ds_references")
-    sys.modules["er3ds_references"] = mod                      # (dataclasses looks its module up by name)
+    mod = types.ModuleType("eforma_references")
+    sys.modules["eforma_references"] = mod                      # (dataclasses looks its module up by name)
     exec(compile(source_text, "references.py", "exec"), mod.__dict__)
     return mod
 
@@ -82,9 +82,9 @@ def render(R, since, also):
     else:
         tail = "All of them are marked as checked."
     out = ['<section>\n<div class="container narrow">', '<h2>Recent methods for registration, parameterization and statistical analysis</h2>',
-           f'<p>ER3DS builds on recent work in elastic shape analysis. This page lists the methods from {since} on that the software uses for <strong>registration</strong>, <strong>parameterization</strong> '
-           f'and <strong>statistical analysis</strong>, taken from the same reference list that the program shows in its tabs and prints with <code>er3ds references</code>. '
-           f'If you use ER3DS in your work, please cite the papers of the methods you used.</p>',
+           f'<p>E-FORMA builds on recent work in elastic shape analysis. This page lists the methods from {since} on that the software uses for <strong>registration</strong>, <strong>parameterization</strong> '
+           f'and <strong>statistical analysis</strong>, taken from the same reference list that the program shows in its tabs and prints with <code>eforma references</code>. '
+           f'If you use E-FORMA in your work, please cite the papers of the methods you used.</p>',
            f'<div class="note"><p><strong>How far the entries have been checked.</strong> Of the {len(featured)} methods below, {count(featured, lambda r: r.checked)} were looked up online '
            f'(authors, title, journal and link) when the entry was written, and {count(featured, lambda r: r.url)} have a direct link. {tail}</p></div>',
            '<p>A citation for the software itself is not available yet; if you mention the program, give its name and the version number shown on the <a href="download.html">download page</a>.</p>',
@@ -133,9 +133,9 @@ def main(argv=None):
     also = set(cfg.get("also_featured", []))
     if a.zip:
         with zipfile.ZipFile(a.zip) as z:
-            names = [m for m in z.namelist() if re.search(r"(^|/)src/er3ds/references\.py$", m)]
+            names = [m for m in z.namelist() if re.search(r"(^|/)src/eforma/references\.py$", m)]
             if not names:
-                raise SystemExit(f"error: no src/er3ds/references.py in {a.zip}")
+                raise SystemExit(f"error: no src/eforma/references.py in {a.zip}")
             text = z.read(names[0]).decode("utf-8")
     else:
         text = open(a.source, encoding="utf-8").read()

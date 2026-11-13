@@ -2,9 +2,9 @@
 """Tell the site its GitHub repository, and write the web address of the site into the pages' preview tags (og:image, og:url): link previews (when somebody shares the address in a message, a
 social network or a chat) need a FULL address, not a relative one.  Run it once, and again if you ever rename the organization or the repository:
 
-    python tools/set_site_url.py https://github.com/er3ds/er3ds            ->  https://er3ds.github.io/er3ds/
-    python tools/set_site_url.py https://github.com/er3ds/er3ds.github.io  ->  https://er3ds.github.io/
-    python tools/set_site_url.py https://github.com/er3ds/er3ds --site-url https://www.mydomain.org/     (if you use your own domain)
+    python tools/set_site_url.py https://github.com/eforma/eforma            ->  https://eforma.github.io/eforma/
+    python tools/set_site_url.py https://github.com/eforma/eforma.github.io  ->  https://eforma.github.io/
+    python tools/set_site_url.py https://github.com/eforma/eforma --site-url https://www.mydomain.org/     (if you use your own domain)
 
 It also writes data/site.json ("github_repo_url").  Then upload data/site.json and the pages (*.html).
 """
